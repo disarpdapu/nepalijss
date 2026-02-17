@@ -1,19 +1,11 @@
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import Emblem from "@/components/Emblem";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header bar */}
-      <header className="bg-congress-blue text-primary-foreground py-3 px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <span className="font-devanagari text-sm tracking-wide opacity-90">
-            नेपाली जनसम्पर्क समिति – स्पेन
-          </span>
-          <span className="font-body text-sm tracking-wider opacity-80 uppercase">
-            Est. Nepal &bull; Spain
-          </span>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Hero section */}
       <main className="flex flex-col items-center justify-center py-16 px-6">
@@ -29,10 +21,14 @@ const Index = () => {
           नेपाली जनसम्पर्क समिति – स्पेन
         </p>
 
+        <p className="font-body text-sm text-congress-green font-semibold text-center mb-4 uppercase tracking-wider">
+          A Committee of Nepali Congress (नेपाली काँग्रेस)
+        </p>
+
         <p className="font-body text-muted-foreground text-center max-w-xl mb-10 leading-relaxed">
           Nepalese People Co-ordination Committee, Spain — Uniting the Nepali
           diaspora in Spain through democratic values, cultural heritage, and
-          community service.
+          community service under the banner of Nepali Congress.
         </p>
 
         {/* Decorative divider */}
@@ -62,25 +58,7 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-congress-blue text-primary-foreground py-8 px-6 mt-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="font-devanagari text-lg mb-1">
-            नेपाली जनसम्पर्क समिति – स्पेन
-          </p>
-          <p className="font-body text-sm opacity-70">
-            Nepalese People Co-ordination Committee, Spain
-          </p>
-          <div className="mt-4 flex items-center justify-center gap-2">
-            <span className="inline-block w-8 h-1 rounded bg-congress-red" />
-            <span className="inline-block w-8 h-1 rounded" style={{ backgroundColor: 'hsl(44, 88%, 57%)' }} />
-            <span className="inline-block w-8 h-1 rounded bg-congress-red" />
-          </div>
-          <p className="mt-4 text-xs opacity-50 font-body">
-            © {new Date().getFullYear()} Nepali Janasamparka Samiti – Spain. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
