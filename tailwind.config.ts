@@ -61,6 +61,8 @@ export default {
           red: "hsl(var(--spain-red))",
           yellow: "hsl(var(--spain-yellow))",
         },
+        "border-t-congress-red": "hsl(var(--congress-red))",
+        "border-t-congress-green": "hsl(var(--congress-green))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
