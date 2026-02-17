@@ -1,7 +1,7 @@
 import symbolSvg from "@/assets/symbol.svg";
 
 const Footer = () => (
-  <footer className="bg-primary text-primary-foreground py-8 px-6 mt-16">
+  <footer className="bg-congress-green text-primary-foreground py-8 px-6 mt-16">
     <div className="max-w-4xl mx-auto text-center">
       <img src={symbolSvg} alt="Nepali Congress Symbol" className="w-12 h-12 mx-auto mb-3 brightness-0 invert opacity-80" />
       <p className="font-devanagari text-lg mb-1">

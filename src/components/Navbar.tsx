@@ -14,7 +14,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="bg-primary text-primary-foreground">
+    <nav className="bg-congress-green text-primary-foreground">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
         <Link to="/" className="flex items-center gap-2">
           <span className="font-devanagari text-sm font-semibold tracking-wide">
