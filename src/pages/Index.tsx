@@ -1,6 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Emblem from "@/components/Emblem";
+import jssLogo from "@/assets/jss_logo.svg";
+
+const CongressStar = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+  </svg>
+);
 
 const Index = () => {
   return (
@@ -10,11 +16,11 @@ const Index = () => {
       {/* Hero section */}
       <main className="flex flex-col items-center justify-center py-16 px-6">
         <div className="mb-10 animate-fade-in">
-          <Emblem size={380} />
+          <img src={jssLogo} alt="JSS Logo" className="w-72 h-72 md:w-96 md:h-96" />
         </div>
 
         <h1 className="font-display text-3xl md:text-4xl font-bold text-congress-blue text-center mb-3 tracking-tight">
-          Nepali Janasamparka Samiti
+          Nepali Janasamparka Samiti – Spain
         </h1>
 
         <p className="font-devanagari text-xl md:text-2xl text-congress-red font-semibold text-center mb-2">
@@ -31,11 +37,12 @@ const Index = () => {
           community service under the banner of Nepali Congress.
         </p>
 
-        {/* Decorative divider */}
-        <div className="flex items-center gap-3 mb-12">
-          <div className="h-px w-16 bg-congress-blue opacity-30" />
-          <div className="w-2 h-2 rounded-full bg-congress-red" />
-          <div className="h-px w-16 bg-congress-blue opacity-30" />
+        {/* Congress flag stars */}
+        <div className="flex items-center gap-4 mb-12">
+          <CongressStar className="w-6 h-6 text-congress-red" />
+          <CongressStar className="w-6 h-6 text-congress-blue" />
+          <CongressStar className="w-6 h-6 text-congress-red" />
+          <CongressStar className="w-6 h-6 text-congress-blue" />
         </div>
 
         {/* Values cards */}
