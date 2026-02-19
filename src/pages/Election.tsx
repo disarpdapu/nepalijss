@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import symbolSvg from "@/assets/symbol.svg";
+import nepalMapSvg from "@/assets/nepal_map.svg";
 import { supabase } from "@/integrations/supabase/client";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 const CongressStar = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor">
@@ -13,37 +14,42 @@ const CongressStar = ({ className = "" }: { className?: string }) => (
 );
 
 type Candidate = {
+  id: number;
   name: string;
+  age: number;
+  gender: string;
   district: string;
   province: string;
-  constituency: string;
-  type: string;
+  provinceId: number;
+  constituency: number;
+  constituencyId: number;
+  symbol: string;
+  votes: number;
+  status: string | null;
+  qualification: string;
+  address: string;
+  fatherName: string;
+  spouseName: string;
 };
 
-// Nepal provinces with approximate SVG positions for map
-const provincePositions: Record<string, { x: number; y: number; label: string }> = {
-  "Province No. 1": { x: 370, y: 120, label: "प्रदेश नं. १" },
-  "Koshi": { x: 370, y: 120, label: "कोशी" },
-  "Madhesh": { x: 300, y: 200, label: "मधेश" },
-  "Province No. 2": { x: 300, y: 200, label: "प्रदेश नं. २" },
-  "Bagmati": { x: 250, y: 130, label: "बागमती" },
-  "Province No. 3": { x: 250, y: 130, label: "प्रदेश नं. ३" },
-  "Gandaki": { x: 190, y: 100, label: "गण्डकी" },
-  "Province No. 4": { x: 190, y: 100, label: "प्रदेश नं. ४" },
-  "Lumbini": { x: 140, y: 160, label: "लुम्बिनी" },
-  "Province No. 5": { x: 140, y: 160, label: "प्रदेश नं. ५" },
-  "Karnali": { x: 100, y: 80, label: "कर्णाली" },
-  "Province No. 6": { x: 100, y: 80, label: "प्रदेश नं. ६" },
-  "Sudurpashchim": { x: 40, y: 100, label: "सुदूरपश्चिम" },
-  "Province No. 7": { x: 40, y: 100, label: "प्रदेश नं. ७" },
-};
+// Province data with approximate positions on the Nepal map image
+const provinces = [
+  { id: 1, name: "कोशी प्रदेश", nameEn: "Koshi", x: 78, y: 38 },
+  { id: 2, name: "मधेश प्रदेश", nameEn: "Madhesh", x: 55, y: 72 },
+  { id: 3, name: "बागमती प्रदेश", nameEn: "Bagmati", x: 50, y: 42 },
+  { id: 4, name: "गण्डकी प्रदेश", nameEn: "Gandaki", x: 38, y: 32 },
+  { id: 5, name: "लुम्बिनी प्रदेश", nameEn: "Lumbini", x: 30, y: 55 },
+  { id: 6, name: "कर्णाली प्रदेश", nameEn: "Karnali", x: 20, y: 28 },
+  { id: 7, name: "सुदूरपश्चिम प्रदेश", nameEn: "Sudurpashchim", x: 8, y: 38 },
+];
 
 const Election = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
-  const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
+  const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
+  const [hoveredProvince, setHoveredProvince] = useState<number | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
 
   useEffect(() => {
     fetchCandidates();
@@ -52,6 +58,7 @@ const Election = () => {
   const fetchCandidates = async () => {
     try {
       setLoading(true);
+      setError(null);
       const { data, error } = await supabase.functions.invoke("scrape-election-data");
       if (error) throw error;
       if (data?.candidates) {
@@ -65,16 +72,16 @@ const Election = () => {
     }
   };
 
-  const groupedByProvince = candidates.reduce((acc, c) => {
-    const key = c.province || "Unknown";
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(c);
-    return acc;
-  }, {} as Record<string, Candidate[]>);
+  const getProvinceCandidates = (provinceId: number) =>
+    candidates.filter((c) => c.provinceId === provinceId);
 
   const filteredCandidates = selectedProvince
-    ? groupedByProvince[selectedProvince] || []
+    ? getProvinceCandidates(selectedProvince)
     : candidates;
+
+  const selectedProvinceName = selectedProvince
+    ? provinces.find((p) => p.id === selectedProvince)
+    : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -93,7 +100,6 @@ const Election = () => {
           <p className="font-body text-sm md:text-base opacity-90 max-w-2xl mx-auto leading-relaxed">
             Nepali Congress (नेपाली काँग्रेस) has been the pillar of democracy in Nepal since 1947.
             Support the party that stands for freedom, justice, and prosperity for all Nepali people.
-            Together, we build a stronger, democratic Nepal.
           </p>
           <div className="mt-6 flex items-center justify-center gap-3">
             <CongressStar className="w-5 h-5 text-primary-foreground" />
@@ -140,77 +146,62 @@ const Election = () => {
           </Card>
         </section>
 
-        {/* Nepal Map Section */}
+        {/* Nepal Map & Candidates Section */}
         <section className="mb-16">
           <h2 className="font-display text-2xl font-bold text-congress-blue text-center mb-2">
-            Nepali Congress Election Candidates
+            Nepali Congress Election Candidates 2082
           </h2>
           <p className="font-devanagari text-congress-red text-center mb-8">
-            नेपाली काँग्रेसका निर्वाचन उम्मेदवारहरू
+            नेपाली काँग्रेसका निर्वाचन उम्मेदवारहरू २०८२
           </p>
 
           {/* Interactive Nepal Map */}
           <div className="bg-card border border-border rounded-lg p-6 mb-8">
             <p className="text-center text-sm text-muted-foreground font-body mb-4">
-              Click on a province to see candidates from that region
+              Click on a province to see Nepali Congress candidates from that region
             </p>
-            <TooltipProvider>
-              <svg viewBox="0 0 450 260" className="w-full max-w-2xl mx-auto">
-                {/* Simplified Nepal outline */}
-                <path
-                  d="M10 130 C15 100 30 70 60 55 C90 40 120 35 150 40 C180 45 200 55 220 65 C240 75 260 90 280 95 C300 100 320 100 340 105 C360 110 380 120 400 135 C410 145 415 155 410 170 C405 185 395 195 380 205 C365 210 345 212 325 213 C305 214 285 212 265 210 C245 208 225 208 205 210 C185 212 165 214 145 213 C125 212 105 208 90 200 C75 192 65 180 55 168 C45 156 35 145 25 138 C15 133 10 132 10 130 Z"
-                  fill="hsl(var(--congress-green) / 0.15)"
-                  stroke="hsl(var(--congress-green))"
-                  strokeWidth="1.5"
-                  className="transition-colors"
-                />
-                {/* Province markers */}
-                {Object.entries(provincePositions).map(([name, pos]) => {
-                  const count = groupedByProvince[name]?.length || 0;
-                  if (count === 0 && !["Koshi", "Madhesh", "Bagmati", "Gandaki", "Lumbini", "Karnali", "Sudurpashchim"].includes(name)) return null;
-                  
-                  const isHovered = hoveredProvince === name;
-                  const isSelected = selectedProvince === name;
+            <div className="relative w-full max-w-3xl mx-auto">
+              <img src={nepalMapSvg} alt="Nepal Map" className="w-full h-auto" />
+              {/* Province overlay markers */}
+              {provinces.map((prov) => {
+                const count = getProvinceCandidates(prov.id).length;
+                const isHovered = hoveredProvince === prov.id;
+                const isSelected = selectedProvince === prov.id;
 
-                  return (
-                    <Tooltip key={name}>
-                      <TooltipTrigger asChild>
-                        <g
-                          className="cursor-pointer"
-                          onMouseEnter={() => setHoveredProvince(name)}
-                          onMouseLeave={() => setHoveredProvince(null)}
-                          onClick={() => setSelectedProvince(selectedProvince === name ? null : name)}
-                        >
-                          <circle
-                            cx={pos.x}
-                            cy={pos.y}
-                            r={isHovered || isSelected ? 14 : 10}
-                            fill={isSelected ? "hsl(var(--congress-red))" : isHovered ? "hsl(var(--congress-blue))" : "hsl(var(--congress-green))"}
-                            className="transition-all duration-200"
-                            opacity={0.9}
-                          />
-                          <text
-                            x={pos.x}
-                            y={pos.y + 4}
-                            textAnchor="middle"
-                            fill="white"
-                            fontSize="8"
-                            fontWeight="bold"
-                          >
-                            {count}
-                          </text>
-                        </g>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="font-semibold">{name}</p>
-                        <p className="font-devanagari text-xs">{pos.label}</p>
-                        <p className="text-xs">{count} candidate{count !== 1 ? "s" : ""}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  );
-                })}
-              </svg>
-            </TooltipProvider>
+                return (
+                  <button
+                    key={prov.id}
+                    className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer transition-all duration-200"
+                    style={{ left: `${prov.x}%`, top: `${prov.y}%` }}
+                    onMouseEnter={() => setHoveredProvince(prov.id)}
+                    onMouseLeave={() => setHoveredProvince(null)}
+                    onClick={() => setSelectedProvince(selectedProvince === prov.id ? null : prov.id)}
+                  >
+                    <div
+                      className={`rounded-full flex items-center justify-center text-primary-foreground font-bold text-xs transition-all duration-200 shadow-lg ${
+                        isSelected
+                          ? "bg-congress-red w-10 h-10 ring-2 ring-primary-foreground"
+                          : isHovered
+                          ? "bg-congress-blue w-9 h-9"
+                          : "bg-congress-green w-8 h-8"
+                      }`}
+                    >
+                      {count}
+                    </div>
+                    {/* Tooltip */}
+                    <div
+                      className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-md px-3 py-1.5 shadow-lg whitespace-nowrap transition-opacity duration-150 ${
+                        isHovered || isSelected ? "opacity-100" : "opacity-0 pointer-events-none"
+                      }`}
+                    >
+                      <p className="font-devanagari text-xs font-semibold text-foreground">{prov.name}</p>
+                      <p className="text-xs text-muted-foreground font-body">{prov.nameEn} • {count} candidates</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
             {selectedProvince && (
               <div className="text-center mt-4">
                 <button
@@ -227,7 +218,7 @@ const Election = () => {
           {loading ? (
             <div className="bg-card border border-border rounded-lg p-8 text-center">
               <div className="animate-spin w-8 h-8 border-4 border-congress-green border-t-transparent rounded-full mx-auto mb-4" />
-              <p className="text-muted-foreground font-body">Loading election candidates...</p>
+              <p className="text-muted-foreground font-body">Loading election candidates from Election Commission...</p>
             </div>
           ) : error ? (
             <div className="bg-card border border-border rounded-lg p-8 text-center">
@@ -239,18 +230,29 @@ const Election = () => {
           ) : filteredCandidates.length > 0 ? (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground font-body text-center mb-4">
-                {selectedProvince ? `${selectedProvince} — ` : ""}
+                {selectedProvinceName
+                  ? `${selectedProvinceName.nameEn} (${selectedProvinceName.name}) — `
+                  : ""}
                 {filteredCandidates.length} Nepali Congress candidate{filteredCandidates.length !== 1 ? "s" : ""}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {filteredCandidates.map((c, i) => (
-                  <Card key={i} className="border-l-4 border-l-congress-green">
+                {filteredCandidates.map((c) => (
+                  <Card
+                    key={c.id}
+                    className="border-l-4 border-l-congress-green cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => setSelectedCandidate(c)}
+                  >
                     <CardContent className="p-4">
                       <p className="font-display font-bold text-congress-blue">{c.name}</p>
                       <p className="text-sm text-muted-foreground font-body">
-                        {c.district} — {c.constituency}
+                        {c.district} — Constituency {c.constituency}
                       </p>
-                      <p className="text-xs text-congress-green font-body mt-1">{c.type}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-congress-green font-body">{c.province}</span>
+                        {c.votes > 0 && (
+                          <span className="text-xs text-muted-foreground font-body">• {c.votes.toLocaleString()} votes</span>
+                        )}
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
@@ -259,16 +261,78 @@ const Election = () => {
           ) : (
             <div className="bg-card border border-border rounded-lg p-8 text-center">
               <p className="text-muted-foreground font-body">
-                No Nepali Congress candidates found{selectedProvince ? ` in ${selectedProvince}` : ""}.
+                No Nepali Congress candidates found{selectedProvinceName ? ` in ${selectedProvinceName.nameEn}` : ""}.
               </p>
             </div>
           )}
 
           <p className="text-xs text-muted-foreground mt-4 text-center font-body">
-            Source: <a href="https://result.election.gov.np/" target="_blank" rel="noopener noreferrer" className="text-congress-blue underline">result.election.gov.np</a>
+            Source: <a href="https://result.election.gov.np/" target="_blank" rel="noopener noreferrer" className="text-congress-blue underline">result.election.gov.np</a> — Election 2082
           </p>
         </section>
       </main>
+
+      {/* Candidate Detail Dialog */}
+      <Dialog open={!!selectedCandidate} onOpenChange={() => setSelectedCandidate(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-congress-blue">
+              {selectedCandidate?.name}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedCandidate && (
+            <div className="space-y-3 font-body text-sm">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <p className="text-muted-foreground">District</p>
+                  <p className="font-semibold">{selectedCandidate.district}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Constituency</p>
+                  <p className="font-semibold">{selectedCandidate.constituency}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Province</p>
+                  <p className="font-semibold">{selectedCandidate.province}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Age</p>
+                  <p className="font-semibold">{selectedCandidate.age}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Gender</p>
+                  <p className="font-semibold">{selectedCandidate.gender}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Symbol</p>
+                  <p className="font-semibold">{selectedCandidate.symbol}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Qualification</p>
+                  <p className="font-semibold">{selectedCandidate.qualification}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Votes</p>
+                  <p className="font-semibold">{selectedCandidate.votes > 0 ? selectedCandidate.votes.toLocaleString() : "—"}</p>
+                </div>
+              </div>
+              {selectedCandidate.address && (
+                <div>
+                  <p className="text-muted-foreground">Address</p>
+                  <p className="font-semibold">{selectedCandidate.address}</p>
+                </div>
+              )}
+              {selectedCandidate.status && (
+                <div className="pt-2 border-t border-border">
+                  <p className="text-congress-green font-semibold">
+                    Status: {selectedCandidate.status}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

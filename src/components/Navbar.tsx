@@ -18,9 +18,9 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
         <Link to="/" className="flex items-center gap-2">
           <span className="font-devanagari text-sm font-semibold tracking-wide">
-            नेपाली काँग्रेस
+            नेपाली जनसम्पर्क समिति
           </span>
-          <span className="text-xs opacity-70 font-body hidden sm:inline">| Nepali Congress</span>
+          <span className="text-xs opacity-70 font-body hidden sm:inline">| Nepali Janasamparka Samiti</span>
         </Link>
 
         {/* Desktop nav */}
