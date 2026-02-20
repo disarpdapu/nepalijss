@@ -36,13 +36,13 @@ type Candidate = {
 // Province data with accurate positions on the Nepal province map
 // Positions are percentages relative to the map image dimensions
 const provinces = [
-  { id: 1, name: "कोशी प्रदेश", nameEn: "Koshi", x: 80, y: 42 },
-  { id: 2, name: "मधेश प्रदेश", nameEn: "Madhesh", x: 62, y: 78 },
-  { id: 3, name: "बागमती प्रदेश", nameEn: "Bagmati", x: 58, y: 42 },
-  { id: 4, name: "गण्डकी प्रदेश", nameEn: "Gandaki", x: 45, y: 30 },
-  { id: 5, name: "लुम्बिनी प्रदेश", nameEn: "Lumbini", x: 35, y: 58 },
-  { id: 6, name: "कर्णाली प्रदेश", nameEn: "Karnali", x: 25, y: 25 },
-  { id: 7, name: "सुदूरपश्चिम प्रदेश", nameEn: "Sudurpashchim", x: 12, y: 38 },
+  { id: 1, name: "कोशी प्रदेश", nameEn: "Koshi", x: 85, y: 38 },
+  { id: 2, name: "मधेश प्रदेश", nameEn: "Madhesh", x: 65, y: 75 },
+  { id: 3, name: "बागमती प्रदेश", nameEn: "Bagmati", x: 62, y: 40 },
+  { id: 4, name: "गण्डकी प्रदेश", nameEn: "Gandaki", x: 50, y: 30 },
+  { id: 5, name: "लुम्बिनी प्रदेश", nameEn: "Lumbini", x: 40, y: 55 },
+  { id: 6, name: "कर्णाली प्रदेश", nameEn: "Karnali", x: 30, y: 25 },
+  { id: 7, name: "सुदूरपश्चिम प्रदेश", nameEn: "Sudurpashchim", x: 18, y: 38 },
 ];
 
 const Election = () => {
@@ -209,24 +209,26 @@ const Election = () => {
                       <span className="absolute inset-0 rounded-full bg-congress-red opacity-30 animate-ping" />
                     )}
                     <div
-                      className={`relative rounded-full flex items-center justify-center text-primary-foreground font-bold text-xs transition-all duration-200 shadow-lg ${
+                      className={`relative rounded-full flex items-center justify-center text-primary-foreground font-bold transition-all duration-200 shadow-lg ${
                         isSelected
-                          ? "bg-congress-red w-11 h-11 ring-2 ring-primary-foreground ring-offset-2 ring-offset-card"
+                          ? "bg-congress-red w-9 h-9 md:w-11 md:h-11 text-[10px] md:text-xs ring-2 ring-primary-foreground ring-offset-2 ring-offset-card"
                           : isHovered
-                          ? "bg-congress-blue w-10 h-10"
-                          : "bg-congress-green w-9 h-9"
+                          ? "bg-congress-blue w-8 h-8 md:w-10 md:h-10 text-[10px] md:text-xs"
+                          : "bg-congress-green w-7 h-7 md:w-9 md:h-9 text-[10px] md:text-xs"
                       }`}
                     >
                       {loading ? "…" : count}
                     </div>
-                    {/* Tooltip */}
+                    {/* Tooltip - repositioned for mobile */}
                     <div
-                      className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-card border border-border rounded-md px-3 py-2 shadow-lg whitespace-nowrap transition-all duration-150 z-20 ${
+                      className={`absolute left-1/2 -translate-x-1/2 bg-card border border-border rounded-md px-2 py-1.5 shadow-lg whitespace-nowrap transition-all duration-150 z-20 ${
+                        prov.y < 40 ? "top-full mt-2" : "bottom-full mb-2"
+                      } ${
                         isHovered || isSelected ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                       }`}
                     >
-                      <p className="font-devanagari text-xs font-semibold text-foreground">{prov.name}</p>
-                      <p className="text-xs text-muted-foreground font-body">{prov.nameEn} • {count} candidates</p>
+                      <p className="font-devanagari text-[10px] md:text-xs font-semibold text-foreground">{prov.name}</p>
+                      <p className="text-[10px] md:text-xs text-muted-foreground font-body">{prov.nameEn} • {count}</p>
                     </div>
                   </button>
                 );
