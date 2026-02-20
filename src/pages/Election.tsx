@@ -42,7 +42,7 @@ const provinces = [
   { id: 4, name: "गण्डकी प्रदेश", nameEn: "Gandaki", x: 48, y: 48 },
   { id: 5, name: "लुम्बिनी प्रदेश", nameEn: "Lumbini", x: 33, y: 60 },
   { id: 6, name: "कर्णाली प्रदेश", nameEn: "Karnali", x: 28, y: 29 },
-  { id: 7, name: "सुदूरपश्चिम प्रदेश", nameEn: "Sudurpashchim", x: 8, y: 25 },
+  { id: 7, name: "सुदूरपश्चिम प्रदेश", nameEn: "Sudurpashchim", x: 11, y: 25 },
 ];
 
 const Election = () => {
