@@ -38,8 +38,8 @@ type Candidate = {
 const provinces = [
   { id: 1, name: "कोशी प्रदेश", nameEn: "Koshi", x: 87, y: 78 },
   { id: 2, name: "मधेश प्रदेश", nameEn: "Madhesh", x: 68, y: 83 },
-  { id: 3, name: "बागमती प्रदेश", nameEn: "Bagmati", x: 68, y: 59 },
-  { id: 4, name: "गण्डकी प्रदेश", nameEn: "Gandaki", x: 53, y: 48 },
+  { id: 3, name: "बागमती प्रदेश", nameEn: "Bagmati", x: 68, y: 66 },
+  { id: 4, name: "गण्डकी प्रदेश", nameEn: "Gandaki", x: 48, y: 48 },
   { id: 5, name: "लुम्बिनी प्रदेश", nameEn: "Lumbini", x: 33, y: 60 },
   { id: 6, name: "कर्णाली प्रदेश", nameEn: "Karnali", x: 28, y: 29 },
   { id: 7, name: "सुदूरपश्चिम प्रदेश", nameEn: "Sudurpashchim", x: 8, y: 25 },
