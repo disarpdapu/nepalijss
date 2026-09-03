@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "ports": {"preview": 8080, "additional": {}},
+  "scripts": {
+    "setup": {"enabled": true, "command": "npm ci --no-audit --no-fund"},
+    "run": {"enabled": true, "command": "npm run dev"},
+    "archive": {"enabled": true, "command": null},
+    "check": {
+      "enabled": true,
+      "command": "npm run check"
+    }
+  },
+  "mcpServers": []
+}

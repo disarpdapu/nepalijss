@@ -2,99 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
-
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 40% 13%;
+    color-scheme: light;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 40% 13%;
+    /* Paper and ink */
+    --background: 48 14% 97%;
+    --foreground: 160 28% 11%;
+    --muted: 150 10% 92%;
+    --muted-foreground: 158 10% 36%;
+    --border: 150 10% 85%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 40% 13%;
+    /* Institutional palette: the committee's green, the Congress flag, Spain */
+    --forest: 145 78% 22%;
+    --forest-deep: 152 62% 14%;
+    --forest-soft: 145 22% 93%;
+    --crimson: 351 84% 42%;
+    --gold: 42 66% 50%;
+    --gold-bright: 44 92% 64%;
+    --paper: 48 14% 97%;
+    --rule: 150 10% 85%;
+    --spain-red: 358 78% 37%;
+    --spain-yellow: 48 100% 47%;
 
-    --primary: 220 100% 22%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 30% 94%;
-    --secondary-foreground: 220 40% 13%;
-
-    --muted: 210 20% 93%;
-    --muted-foreground: 220 10% 45%;
-
-    --accent: 0 100% 50%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 20% 88%;
-    --input: 220 20% 88%;
-    --ring: 220 100% 22%;
-
-    --radius: 0.5rem;
-
-    /* Institutional palette */
-    --congress-red: 0 100% 50%;
-    --congress-green: 145 78% 22%;
-    --congress-blue: 220 100% 22%;
-    --spain-red: 357 78% 38%;
-    --spain-yellow: 44 88% 57%;
-    --gold-accent: 40 70% 50%;
-
-    /* Typography */
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
-    --font-devanagari: 'Noto Sans Devanagari', sans-serif;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 220 30% 8%;
-    --foreground: 210 30% 95%;
-
-    --card: 220 30% 12%;
-    --card-foreground: 210 30% 95%;
-
-    --popover: 220 30% 12%;
-    --popover-foreground: 210 30% 95%;
-
-    --primary: 210 60% 70%;
-    --primary-foreground: 220 40% 10%;
-
-    --secondary: 220 25% 18%;
-    --secondary-foreground: 210 30% 95%;
-
-    --muted: 220 25% 18%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 0 80% 55%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 25% 20%;
-    --input: 220 25% 20%;
-    --ring: 210 60% 70%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --font-display: "Newsreader", "Georgia", serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --font-devanagari: "Martel", "Noto Sans Devanagari", serif;
   }
 }
 
@@ -103,13 +36,110 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchored headings clear of the sticky header */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    font-feature-settings: "kern", "liga";
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
     font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p, li {
+    text-wrap: pretty;
+  }
+
+  a, button {
+    touch-action: manipulation;
+  }
+
+  /* Devanagari runs are marked with lang="ne" so the serif Devanagari face applies everywhere */
+  [lang="ne"] {
+    font-family: var(--font-devanagari);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--crimson));
+    outline-offset: 3px;
+  }
+
+  /* Crimson has too little contrast on the green surfaces; use gold there */
+  .on-forest :focus-visible {
+    outline-color: hsl(var(--gold-bright));
+  }
+
+  ::selection {
+    background: hsl(var(--gold-bright) / 0.45);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Nepali Congress flag: red–white–red bands. Used as a structural rule, never as decoration alone. */
+  .flag-rule {
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--crimson)) 0 33.33%,
+      #fff 33.33% 66.66%,
+      hsl(var(--crimson)) 66.66% 100%
+    );
+  }
+
+  .measure {
+    max-width: 66ch;
+  }
+
+  .prose-doc {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.86);
+  }
+
+  .prose-doc[lang="ne"],
+  .prose-doc [lang="ne"] {
+    font-family: var(--font-devanagari);
+    font-size: 1.0625rem;
+    line-height: 1.95;
+  }
+
+  .link-underline {
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--forest) / 0.35);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 160ms ease, color 160ms ease;
+  }
+  .link-underline:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .on-forest .link-underline {
+    text-decoration-color: hsl(var(--gold-bright) / 0.5);
+  }
+  .on-forest .link-underline:hover {
+    text-decoration-color: hsl(var(--gold-bright));
   }
 }
 
@@ -117,40 +147,23 @@
   .font-devanagari {
     font-family: var(--font-devanagari);
   }
-
   .font-display {
     font-family: var(--font-display);
   }
-
   .font-body {
     font-family: var(--font-body);
   }
 
-  .text-congress-red {
-    color: hsl(var(--congress-red));
+  .rise {
+    animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
+  .rise-delay-1 { animation-delay: 90ms; }
+  .rise-delay-2 { animation-delay: 180ms; }
+  .rise-delay-3 { animation-delay: 270ms; }
+  .rise-delay-4 { animation-delay: 380ms; }
 
-  .text-congress-green {
-    color: hsl(var(--congress-green));
-  }
-
-  .text-congress-blue {
-    color: hsl(var(--congress-blue));
-  }
-
-  .bg-congress-red {
-    background-color: hsl(var(--congress-red));
-  }
-
-  .bg-congress-green {
-    background-color: hsl(var(--congress-green));
-  }
-
-  .bg-congress-blue {
-    background-color: hsl(var(--congress-blue));
-  }
-
-  .border-congress-blue {
-    border-color: hsl(var(--congress-blue));
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }

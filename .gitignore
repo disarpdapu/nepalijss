@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
+
+# Local Hoplite QA artifacts (keep .hoplite/settings.json versioned)
+.hoplite/shots/
+.hoplite/__pycache__/
 
 # Editor directories and files
 .vscode/*
