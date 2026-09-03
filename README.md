@@ -1,73 +1,71 @@
-# Welcome to your Lovable project
+# Nepali Janasamparka Samiti – Spain
 
-## Project info
+Official bilingual website for Nepali Janasamparka Samiti – Spain (Nepalese People Co-ordination Committee, Spain), an overseas committee of Nepali Congress.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+The site introduces the committee and its history while centring its work in Spain: organising Dashain, Tihar, Teej, and Nepali New Year celebrations, bringing Nepali people together, and participating in meetings hosted by NRNA.
 
-## How can I edit this code?
+## Live site
 
-There are several ways of editing your application.
+[nepalijss.vercel.app](https://nepalijss.vercel.app/)
 
-**Use Lovable**
+## Technology
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- React 18 and TypeScript
+- Vite 8
+- React Router
+- Tailwind CSS
+- Vitest and Testing Library
 
-Changes made via Lovable will be committed automatically to this repo.
+## Local development
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Node.js 22.13 or newer and npm are required.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm ci
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The development server runs at `http://localhost:8080`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Commands
 
-**Use GitHub Codespaces**
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Create the production build in `dist/` |
+| `npm run preview` | Preview a completed production build |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Check the application and build configuration types |
+| `npm test` | Run the test suite once |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run check` | Run lint, type checks, tests, and a production build |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Routes
 
-## What technologies are used for this project?
+| Route | Content |
+| --- | --- |
+| `/` | Committee identity, community focus, and Nepali Congress affiliation |
+| `/about` | Committee background, focus, party history, and activities |
+| Any other route | Localised 404 page with a return link |
 
-This project is built with:
+The Vercel rewrite in `vercel.json` sends direct visits to client-side routes through the React application.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Internationalisation
 
-## How can I deploy this project?
+English and Nepali copy lives in `src/i18n/translations.ts`. The language switcher persists the selected language in local storage under `njs-language` and updates the document’s `lang` attribute.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Structure
 
-## Can I connect a custom domain to my Lovable project?
+```text
+src/
+├── assets/       Brand and national symbols
+├── components/   Shared navigation, footer, and page shell
+├── contexts/     Language state and persistence
+├── i18n/         English and Nepali content
+├── pages/        Home, About, and Not Found pages
+└── test/         Application tests and browser-like setup
+```
 
-Yes, you can!
+## Accessibility
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+The interface includes semantic landmarks and headings, a skip link, visible keyboard focus, active navigation state, labelled controls, responsive 44px touch targets, correct language metadata, and reduced-motion handling.

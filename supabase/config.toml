@@ -1,4 +1,0 @@
-project_id = "ctiegvhoqaechkrnpigf"
-
-[functions.scrape-election-data]
-verify_jwt = false

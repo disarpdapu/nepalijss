@@ -1,100 +1,159 @@
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, Link, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Menu, X, Globe } from "lucide-react";
-import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Navbar = () => {
-  const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { language, setLanguage, t } = useLanguage();
+  const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const { language, toggleLanguage, t } = useLanguage();
 
   const navItems = [
     { to: "/", label: t("nav.home") },
     { to: "/about", label: t("nav.about") },
-    { to: "/election", label: t("nav.election") },
   ];
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    cn(
+      "relative inline-flex h-16 items-center px-1 font-body text-[15px] tracking-[0.01em] text-white/75 transition-colors duration-200",
+      "hover:text-white",
+      "after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:scale-x-0 after:bg-gold-bright after:transition-transform after:duration-300 after:ease-out",
+      isActive && "text-white after:scale-x-100",
+    );
+
   return (
-    <nav className="bg-congress-green text-primary-foreground">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="font-devanagari text-sm font-semibold tracking-wide">
+    <header className="on-forest sticky top-0 z-40 bg-forest-deep text-white">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:font-body focus:text-sm focus:text-forest-deep"
+      >
+        {t("nav.skip")}
+      </a>
+
+      <div className="flag-rule h-1.5" aria-hidden="true" />
+
+      <nav aria-label={t("nav.primary")} className="mx-auto flex h-16 max-w-site items-stretch justify-between px-5 sm:px-8">
+        <Link to="/" className="group flex min-w-0 items-center gap-3 self-center" aria-label={t("index.orgLatin")}>
+          <span
+            lang="ne"
+            className="truncate font-devanagari text-[17px] font-semibold leading-none tracking-tight text-white sm:text-lg"
+          >
             {t("nav.orgName")}
+          </span>
+          <span className="hidden h-4 w-px shrink-0 bg-white/25 sm:block" aria-hidden="true" />
+          <span className="hidden shrink-0 font-display text-[17px] italic leading-none text-gold-bright/90 transition-colors group-hover:text-gold-bright sm:block">
+            {t("nav.orgPlace")}
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-1">
-          <ul className="flex items-center gap-1">
+        <div className="hidden items-stretch gap-8 md:flex">
+          <ul className="flex items-stretch gap-8">
             {navItems.map((item) => (
-              <li key={item.to}>
-                <Link
-                  to={item.to}
-                  className={cn(
-                    "px-4 py-2 rounded text-sm font-body transition-colors",
-                    location.pathname === item.to
-                      ? "bg-primary-foreground/20 font-semibold"
-                      : "hover:bg-primary-foreground/10"
-                  )}
-                >
+              <li key={item.to} className="flex">
+                <NavLink to={item.to} end className={linkClass}>
                   {item.label}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
-
-          {/* Language switcher */}
-          <button
-            onClick={() => setLanguage(language === "en" ? "np" : "en")}
-            className="ml-3 flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-body bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
-            aria-label="Switch language"
-          >
-            <Globe size={14} />
-            <span>{language === "en" ? "नेपाली" : "English"}</span>
-          </button>
+          <LanguageToggle language={language} onToggle={toggleLanguage} label={t("nav.switchLabel")} text={t("nav.switchTo")} />
         </div>
 
-        {/* Mobile toggle */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageToggle language={language} onToggle={toggleLanguage} label={t("nav.switchLabel")} text={t("nav.switchTo")} />
           <button
-            onClick={() => setLanguage(language === "en" ? "np" : "en")}
-            className="flex items-center gap-1 px-2 py-1.5 rounded text-xs font-body bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors"
-            aria-label="Switch language"
+            ref={menuButtonRef}
+            type="button"
+            className="-mr-2 inline-flex h-11 w-11 items-center justify-center text-white/85 transition-colors hover:text-white"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? t("nav.close") : t("nav.menu")}
           >
-            <Globe size={14} />
-            <span>{language === "en" ? "ने" : "EN"}</span>
+            {open ? <X size={22} strokeWidth={1.75} aria-hidden="true" /> : <Menu size={22} strokeWidth={1.75} aria-hidden="true" />}
           </button>
-          <button
-            className="p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+        </div>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        aria-hidden={!open}
+        className={cn(
+          "grid transition-[grid-template-rows] duration-300 ease-out md:hidden",
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">
+          <ul className="border-t border-white/10 px-5 py-2 sm:px-8">
+            {navItems.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  end
+                  tabIndex={open ? 0 : -1}
+                  className={({ isActive }) =>
+                    cn(
+                      "flex min-h-[3.25rem] items-center justify-between border-b border-white/10 py-3 font-display text-xl text-white/75 transition-colors hover:text-white last:border-0",
+                      isActive && "text-white",
+                    )
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {item.label}
+                      {isActive && <span className="h-2 w-2 rounded-full bg-gold-bright" aria-hidden="true" />}
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-primary-foreground/20 px-6 pb-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "block py-3 text-sm font-body border-b border-primary-foreground/10 last:border-0",
-                location.pathname === item.to && "font-semibold"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </nav>
+    </header>
   );
 };
+
+const LanguageToggle = ({
+  language,
+  onToggle,
+  label,
+  text,
+}: {
+  language: "en" | "np";
+  onToggle: () => void;
+  label: string;
+  text: string;
+}) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    aria-label={label}
+    className={cn(
+      "inline-flex h-9 items-center self-center border border-white/30 px-3 text-[13px] leading-none text-white/85 transition-colors duration-200",
+      "hover:border-gold-bright hover:text-gold-bright",
+      language === "en" ? "font-devanagari pt-px" : "font-body",
+    )}
+  >
+    <span lang={language === "en" ? "ne" : "en"}>{text}</span>
+  </button>
+);
 
 export default Navbar;
