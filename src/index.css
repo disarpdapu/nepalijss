@@ -6,28 +6,50 @@
   :root {
     color-scheme: light;
 
-    /* Paper and ink */
-    --background: 48 14% 97%;
-    --foreground: 160 28% 11%;
-    --muted: 150 10% 92%;
-    --muted-foreground: 158 10% 36%;
-    --border: 150 10% 85%;
+    /* === Official Nepali Congress palette — exact per spec === */
+    /* Primary */
+    --primary: 115 45% 29%; /* #2D6B28 */
+    --primary-foreground: 0 0% 100%;
+    /* Accents */
+    --accent: 142 71% 45%; /* #22C55E */
+    --accent-dark: 222 47% 11%; /* #1E293B */
+    --accent-red: 0 84% 60%; /* #DC2626 */
+    --accent-secondary: 120 40% 54%; /* #5CB85C */
+    --accent-forest: 142 74% 29%; /* #15803D */
+    --accent-taupe: 220 9% 46%; /* #6B7280 */
+    /* Neutrals */
+    --canvas: 0 0% 100%; /* #FFFFFF */
+    --surface-alt: 220 13% 91%; /* #E5E7EB */
+    --ink: 0 0% 9%; /* #171717 */
+    --body: 221 39% 11%; /* #111827 */
+    --muted: 0 0% 32%; /* #525252 */
+    --faint: 215 16% 32%; /* #4B5563 approx */
+    --hairline: 220 14% 96%; /* #F3F4F6 */
+    --neutral-taupe: 214 7% 69%; /* #AAAEB5 */
 
-    /* Institutional palette: the committee's green, the Congress flag, Spain */
-    --forest: 145 78% 22%;
-    --forest-deep: 152 62% 14%;
-    --forest-soft: 145 22% 93%;
-    --crimson: 351 84% 42%;
-    --gold: 42 66% 50%;
-    --gold-bright: 44 92% 64%;
-    --paper: 48 14% 97%;
-    --rule: 150 10% 85%;
-    --spain-red: 358 78% 37%;
-    --spain-yellow: 48 100% 47%;
+    /* Legacy tokens mapped to new palette */
+    --background: 0 0% 100%;
+    --foreground: 221 39% 11%;
+    --muted-legacy: 220 13% 91%;
+    --muted-foreground: 0 0% 32%;
+    --border: 220 14% 96%;
+    --forest: 115 45% 29%;
+    --forest-deep: 222 47% 11%;
+    --forest-soft: 220 13% 91%;
+    --crimson: 0 84% 60%;
+    --gold: 142 71% 45%;
+    --gold-bright: 142 71% 45%;
+    --paper: 0 0% 100%;
+    --rule: 220 14% 96%;
+    --spain-red: 0 84% 60%;
+    --spain-yellow: 48 96% 53%;
 
-    --font-display: "Newsreader", "Georgia", serif;
-    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-    --font-devanagari: "Martel", "Noto Sans Devanagari", serif;
+    --font-khand: "Khand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-poppins: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-fustat: "Fustat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-display: "Khand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-devanagari: "Khand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 }
 
@@ -38,7 +60,6 @@
 
   html {
     scroll-behavior: smooth;
-    /* Keep anchored headings clear of the sticky header */
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
@@ -46,14 +67,16 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-body);
+    font-family: var(--font-poppins);
     font-feature-settings: "kern", "liga";
     overflow-x: hidden;
+    color: #111827;
   }
 
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-khand);
     text-wrap: balance;
+    letter-spacing: -0.015em;
   }
 
   p, li {
@@ -64,23 +87,23 @@
     touch-action: manipulation;
   }
 
-  /* Devanagari runs are marked with lang="ne" so the serif Devanagari face applies everywhere */
+  /* Devanagari runs */
   [lang="ne"] {
-    font-family: var(--font-devanagari);
+    font-family: var(--font-khand);
   }
 
   :focus-visible {
-    outline: 2px solid hsl(var(--crimson));
+    outline: 2px solid #2D6B28;
     outline-offset: 3px;
   }
 
-  /* Crimson has too little contrast on the green surfaces; use gold there */
-  .on-forest :focus-visible {
-    outline-color: hsl(var(--gold-bright));
+  .on-forest :focus-visible,
+  .on-primary :focus-visible {
+    outline-color: #22C55E;
   }
 
   ::selection {
-    background: hsl(var(--gold-bright) / 0.45);
+    background: #22C55E / 0.3;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -96,13 +119,12 @@
 }
 
 @layer components {
-  /* Nepali Congress flag: red–white–red bands. Used as a structural rule, never as decoration alone. */
   .flag-rule {
     background: linear-gradient(
       to bottom,
-      hsl(var(--crimson)) 0 33.33%,
+      #DC2626 0 33.33%,
       #fff 33.33% 66.66%,
-      hsl(var(--crimson)) 66.66% 100%
+      #DC2626 66.66% 100%
     );
   }
 
@@ -111,22 +133,22 @@
   }
 
   .prose-doc {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-family: var(--font-poppins);
+    font-size: 1.0625rem;
     line-height: 1.7;
-    color: hsl(var(--foreground) / 0.86);
+    color: #111827;
   }
 
   .prose-doc[lang="ne"],
   .prose-doc [lang="ne"] {
-    font-family: var(--font-devanagari);
+    font-family: var(--font-khand);
     font-size: 1.0625rem;
-    line-height: 1.95;
+    line-height: 1.85;
   }
 
   .link-underline {
     text-decoration: underline;
-    text-decoration-color: hsl(var(--forest) / 0.35);
+    text-decoration-color: #2D6B28 / 0.3;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     transition: text-decoration-color 160ms ease, color 160ms ease;
@@ -135,27 +157,58 @@
     text-decoration-color: currentColor;
   }
 
-  .on-forest .link-underline {
-    text-decoration-color: hsl(var(--gold-bright) / 0.5);
+  .on-forest .link-underline,
+  .on-primary .link-underline {
+    text-decoration-color: rgba(34, 197, 94, 0.5);
   }
-  .on-forest .link-underline:hover {
-    text-decoration-color: hsl(var(--gold-bright));
+  .on-forest .link-underline:hover,
+  .on-primary .link-underline:hover {
+    text-decoration-color: #22C55E;
   }
 }
 
 @layer utilities {
+  .font-khand {
+    font-family: var(--font-khand);
+  }
+  .font-poppins {
+    font-family: var(--font-poppins);
+  }
+  .font-fustat {
+    font-family: var(--font-fustat);
+  }
   .font-devanagari {
-    font-family: var(--font-devanagari);
+    font-family: var(--font-khand);
   }
   .font-display {
-    font-family: var(--font-display);
+    font-family: var(--font-khand);
   }
   .font-body {
-    font-family: var(--font-body);
+    font-family: var(--font-poppins);
+  }
+
+  /* Hero pop animations — staggered entrance */
+  .hero-pop {
+    animation: hero-pop 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-pop-1 { animation-delay: 80ms; }
+  .hero-pop-2 { animation-delay: 160ms; }
+  .hero-pop-3 { animation-delay: 240ms; }
+  .hero-pop-4 { animation-delay: 320ms; }
+  .hero-pop-5 { animation-delay: 420ms; }
+
+  @keyframes hero-pop {
+    0% { opacity: 0; transform: translateY(28px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes hero-line {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
   }
 
   .rise {
-    animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation: hero-pop 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
   .rise-delay-1 { animation-delay: 90ms; }
   .rise-delay-2 { animation-delay: 180ms; }
@@ -165,5 +218,24 @@
   @keyframes rise {
     from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Timeline animations */
+  .timeline-enter {
+    animation: slide-up 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Fixed card sizing helper */
+  .history-card {
+    min-height: 420px;
+  }
+  @media (min-width: 768px) {
+    .history-card {
+      min-height: 460px;
+    }
   }
 }

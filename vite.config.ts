@@ -4,8 +4,12 @@ import path from "path";
 
 export default defineConfig({
   server: {
-    host: "::",
+    host: "0.0.0.0",
     port: 8080,
+    allowedHosts: true,
+    headers: {
+      "X-Frame-Options": "ALLOWALL",
+    },
   },
   plugins: [react()],
   resolve: {
