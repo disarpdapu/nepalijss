@@ -8,7 +8,9 @@ const Footer = () => {
   const np = language === "np";
 
   return (
-    <footer className="on-forest bg-forest-deep text-white">
+    <footer className="bg-[#1E293B] text-white">
+      {/* top accent bar */}
+      <div className="h-1 w-full bg-[#2D6B28]" aria-hidden="true" />
       <div className="mx-auto max-w-site px-5 py-14 sm:px-8">
         <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-start">
           <div className="flex gap-5">
@@ -20,30 +22,30 @@ const Footer = () => {
                 width={44}
                 height={44}
                 loading="lazy"
-                className="h-11 w-11 brightness-0 invert opacity-85"
+                className="h-11 w-11 brightness-0 invert opacity-90"
               />
             </div>
             <div className="min-w-0">
-              <p lang="ne" className="font-devanagari text-xl font-semibold leading-tight">
+              <p lang="ne" className="font-khand text-xl font-semibold leading-tight">
                 {t("footer.orgName")}
               </p>
-              <p className="mt-1 font-display text-lg text-white/70">{t("footer.orgNameEn")}</p>
-              <p lang={np ? "ne" : undefined} className={`mt-3 text-sm text-white/60 ${np ? "font-devanagari" : "font-body"}`}>
+              <p className="mt-1 font-poppins text-sm text-white/70">{t("footer.orgNameEn")}</p>
+              <p lang={np ? "ne" : undefined} className={`mt-3 text-sm text-white/60 ${np ? "font-khand" : "font-poppins"}`}>
                 {t("footer.committee")}
               </p>
             </div>
           </div>
 
           <nav aria-label={t("footer.navigate")} className="md:text-right">
-            <p lang={np ? "ne" : undefined} className={`text-xs uppercase tracking-[0.12em] text-gold-bright/80 ${np ? "font-devanagari normal-case tracking-normal" : "font-body"}`}>
+            <p lang={np ? "ne" : undefined} className={`text-xs font-semibold uppercase tracking-[0.12em] text-[#22C55E] ${np ? "font-khand normal-case tracking-normal" : "font-poppins"}`}>
               {t("footer.navigate")}
             </p>
-            <ul className="mt-2 flex gap-6 md:justify-end">
+            <ul className="mt-3 flex gap-6 md:justify-end">
               <li>
                 <Link
                   to="/"
                   lang={np ? "ne" : undefined}
-                  className={`link-underline inline-block py-1 text-lg text-white/85 hover:text-white ${np ? "font-devanagari" : "font-display"}`}
+                  className={`inline-block py-1 text-[15px] font-medium text-white/85 hover:text-white transition-colors ${np ? "font-khand" : "font-khand"}`}
                 >
                   {t("nav.home")}
                 </Link>
@@ -52,7 +54,7 @@ const Footer = () => {
                 <Link
                   to="/about"
                   lang={np ? "ne" : undefined}
-                  className={`link-underline inline-block py-1 text-lg text-white/85 hover:text-white ${np ? "font-devanagari" : "font-display"}`}
+                  className={`inline-block py-1 text-[15px] font-medium text-white/85 hover:text-white transition-colors ${np ? "font-khand" : "font-khand"}`}
                 >
                   {t("nav.about")}
                 </Link>
@@ -62,14 +64,13 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 flex flex-col-reverse gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p lang={np ? "ne" : undefined} className={`text-xs text-white/50 ${np ? "font-devanagari" : "font-body"}`}>
+          <p lang={np ? "ne" : undefined} className={`text-xs text-white/50 ${np ? "font-khand" : "font-poppins"}`}>
             © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
-          {/* Spain's colours: the committee's home */}
           <span className="flex h-1.5 w-20 overflow-hidden" aria-hidden="true">
-            <span className="flex-1 bg-spain-red" />
-            <span className="flex-[2] bg-spain-yellow" />
-            <span className="flex-1 bg-spain-red" />
+            <span className="flex-1 bg-[#DC2626]" />
+            <span className="flex-[2] bg-[#FACC15]" />
+            <span className="flex-1 bg-[#DC2626]" />
           </span>
         </div>
       </div>

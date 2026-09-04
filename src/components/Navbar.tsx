@@ -32,33 +32,36 @@ const Navbar = () => {
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
-      "relative inline-flex h-16 items-center px-1 font-body text-[15px] tracking-[0.01em] text-white/75 transition-colors duration-200",
-      "hover:text-white",
-      "after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:scale-x-0 after:bg-gold-bright after:transition-transform after:duration-300 after:ease-out",
-      isActive && "text-white after:scale-x-100",
+      "relative inline-flex h-16 items-center px-1 font-khand text-[15px] font-medium tracking-[0.01em] transition-colors duration-200",
+      isActive ? "text-[#2D6B28]" : "text-[#374151] hover:text-[#2D6B28]",
+      "after:absolute after:inset-x-0 after:bottom-0 after:h-[2.5px] after:origin-left after:scale-x-0 after:bg-[#2D6B28] after:transition-transform after:duration-300 after:ease-out",
+      isActive && "after:scale-x-100",
     );
 
   return (
-    <header className="on-forest sticky top-0 z-40 bg-forest-deep text-white">
+    <header className="sticky top-0 z-40 border-b border-[#F3F4F6] bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:font-body focus:text-sm focus:text-forest-deep"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-[#2D6B28] focus:px-4 focus:py-2 focus:font-poppins focus:text-sm focus:text-white"
       >
         {t("nav.skip")}
       </a>
 
-      <div className="flag-rule h-1.5" aria-hidden="true" />
+      {/* thin primary accent line on top */}
+      <div className="h-1 w-full bg-[#2D6B28]" aria-hidden="true" />
 
       <nav aria-label={t("nav.primary")} className="mx-auto flex h-16 max-w-site items-stretch justify-between px-5 sm:px-8">
         <Link to="/" className="group flex min-w-0 items-center gap-3 self-center" aria-label={t("index.orgLatin")}>
-          <span
-            lang="ne"
-            className="truncate font-devanagari text-[17px] font-semibold leading-none tracking-tight text-white sm:text-lg"
-          >
-            {t("nav.orgName")}
+          <span className="flex items-center gap-2">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm bg-[#2D6B28] text-white shadow-sm">
+              <span className="font-khand text-[13px] font-bold leading-none">NC</span>
+            </span>
+            <span lang="ne" className="truncate font-khand text-[17px] font-semibold leading-none tracking-tight text-[#171717] sm:text-lg">
+              {t("nav.orgName")}
+            </span>
           </span>
-          <span className="hidden h-4 w-px shrink-0 bg-white/25 sm:block" aria-hidden="true" />
-          <span className="hidden shrink-0 font-display text-[17px] italic leading-none text-gold-bright/90 transition-colors group-hover:text-gold-bright sm:block">
+          <span className="hidden h-4 w-px shrink-0 bg-[#F3F4F6] sm:block" aria-hidden="true" />
+          <span className="hidden shrink-0 font-khand text-[15px] font-medium leading-none text-[#2D6B28] transition-colors group-hover:text-[#15803D] sm:block">
             {t("nav.orgPlace")}
           </span>
         </Link>
@@ -81,7 +84,7 @@ const Navbar = () => {
           <button
             ref={menuButtonRef}
             type="button"
-            className="-mr-2 inline-flex h-11 w-11 items-center justify-center text-white/85 transition-colors hover:text-white"
+            className="inline-flex h-11 w-11 items-center justify-center text-[#374151] transition-colors hover:text-[#2D6B28]"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -100,8 +103,8 @@ const Navbar = () => {
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
         )}
       >
-        <div className="overflow-hidden">
-          <ul className="border-t border-white/10 px-5 py-2 sm:px-8">
+        <div className="overflow-hidden border-t border-[#F3F4F6] bg-white">
+          <ul className="px-5 py-2 sm:px-8">
             {navItems.map((item) => (
               <li key={item.to}>
                 <NavLink
@@ -110,15 +113,15 @@ const Navbar = () => {
                   tabIndex={open ? 0 : -1}
                   className={({ isActive }) =>
                     cn(
-                      "flex min-h-[3.25rem] items-center justify-between border-b border-white/10 py-3 font-display text-xl text-white/75 transition-colors hover:text-white last:border-0",
-                      isActive && "text-white",
+                      "flex min-h-[3.25rem] items-center justify-between border-b border-[#F3F4F6] py-3 font-khand text-xl font-medium transition-colors last:border-0",
+                      isActive ? "text-[#2D6B28]" : "text-[#374151] hover:text-[#2D6B28]",
                     )
                   }
                 >
                   {({ isActive }) => (
                     <>
                       {item.label}
-                      {isActive && <span className="h-2 w-2 rounded-full bg-gold-bright" aria-hidden="true" />}
+                      {isActive && <span className="h-2 w-2 rounded-full bg-[#2D6B28]" aria-hidden="true" />}
                     </>
                   )}
                 </NavLink>
@@ -147,9 +150,8 @@ const LanguageToggle = ({
     onClick={onToggle}
     aria-label={label}
     className={cn(
-      "inline-flex h-9 items-center self-center border border-white/30 px-3 text-[13px] leading-none text-white/85 transition-colors duration-200",
-      "hover:border-gold-bright hover:text-gold-bright",
-      language === "en" ? "font-devanagari pt-px" : "font-body",
+      "inline-flex h-9 items-center self-center border px-3 text-[13px] font-medium leading-none transition-colors duration-200",
+      language === "en" ? "border-[#F3F4F6] bg-white text-[#374151] hover:border-[#2D6B28] hover:text-[#2D6B28] font-khand" : "border-[#F3F4F6] bg-white text-[#374151] hover:border-[#2D6B28] hover:text-[#2D6B28] font-poppins",
     )}
   >
     <span lang={language === "en" ? "ne" : "en"}>{text}</span>
